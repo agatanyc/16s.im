@@ -4,7 +4,7 @@ if __name__ == '__main__':
 
     app = Flask(__name__)
 
-    @app.route("/")
+    @app.route("/pixel.js")
     def index():
         response = app.make_response('Hello world!')
         #response = app.make_response(
