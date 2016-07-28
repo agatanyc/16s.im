@@ -1,8 +1,9 @@
 """Service to collect analytics for a given website.
 """
-from flask import Flask, request
+from flask import Flask, request, render_template
 from user_agents import parse
 from urlparse import urlparse
+from collections import defaultdict
 import uuid
 import datetime
 import statsd
@@ -11,13 +12,21 @@ import stat_server
 
 app = Flask(__name__)
 
-@app.route('/pixel.js')
+time_spent = {}
+
+@app.route('/index')
 def index():
     # Create response object
-    response = app.make_response(
-            'console.log("Your user agent claims to be {}.");'.format(
-                request.headers['user-agent']))
-    response.headers['Content-Type'] = 'application/javascript'
+    counter = 1
+    response = app.make_response(render_template('index.html', time_spent=0))
+    response.headers['Content-Type'] = 'text/html'
+
+    if request.args.get('leaving', ''):
+        print request.args.get('leaving', '')
+        time_spent = request.args.get('timeSpent', '0')
+        print time_spent
+        print int(time_spent)
+        stat_server.time_spent(int(time_spent))
 
     # create cookie to be set on a given browser
     UUID = bytes(uuid.uuid4())
@@ -26,6 +35,7 @@ def index():
     future = now + datetime.timedelta(days=90)
     # cookie will expire in 90 days
     response.set_cookie('user_id', value=UUID, expires=future)
+    stat_server.user_id(UUID)
 
     # parse `user_agent` from the responce headers
     ua_string = request.headers['user-agent']
@@ -47,10 +57,14 @@ def index():
 
     if request.headers.get('referer'):
         referer_parsed =  urlparse(request.headers['referer'])
-        referer = referer_parsed.netlock.split(':')[0]
+        print referer_parsed
+        referer = referer_parsed.netloc.split(':')[0]
         stat_server.referer(referer)
 
     stat_server.status_stat(response.status_code)
+
+    stat_server.users_stat()
+
 
     return response
     
