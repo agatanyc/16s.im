@@ -1,0 +1,14 @@
+<html>
+  <head>
+    <title>Hello</title>
+    <script type="text/javascript" src="/static/tracker.js"></script>
+    <script> 
+        var url = "{{ url_for('index') }}";
+        track(url) 
+    </script>
+  </head>
+  <body>
+Hello {{name}},
+you have spent <div id="time-spent">{{time_spent}}</div> seconds on this page.
+  </body>
+</html>
