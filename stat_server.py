@@ -30,5 +30,6 @@ def user_id(uuid):
     statsd.incr('user_id.{}'.format(uuid), count=1)
 
 def time_spent(seconds):
-    statsd.incr('time_spent.{}'.format('time_spent'), count=seconds)
+    #statsd.incr('time_spent.{}'.format('time_spent'), count=seconds)
+    statsd.incr('time_spent', count=seconds)
 

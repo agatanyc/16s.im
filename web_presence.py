@@ -12,20 +12,14 @@ import stat_server
 
 app = Flask(__name__)
 
-time_spent = {}
-
 @app.route('/index')
 def index():
     # Create response object
-    counter = 1
     response = app.make_response(render_template('index.html', time_spent=0))
     response.headers['Content-Type'] = 'text/html'
-
+    print request.args.get('leaving', 'no value!!!')
     if request.args.get('leaving', ''):
-        print request.args.get('leaving', '')
         time_spent = request.args.get('timeSpent', '0')
-        print time_spent
-        print int(time_spent)
         stat_server.time_spent(int(time_spent))
 
     # create cookie to be set on a given browser
@@ -57,7 +51,6 @@ def index():
 
     if request.headers.get('referer'):
         referer_parsed =  urlparse(request.headers['referer'])
-        print referer_parsed
         referer = referer_parsed.netloc.split(':')[0]
         stat_server.referer(referer)
 
@@ -68,20 +61,6 @@ def index():
 
     return response
     
-#__________________________
-
-def log_status_code(res):
-    stat_server.status_stat(res.status_code)
-    return res
-
-@app.route('/page/<id>')
-def display_message(id):
-    stat_server.users_stat()
-    return 'Page ID is {} !'.format(id)
-
-app.after_request(log_status_code) # the parameter function will run 
-                                   # after each request
-
 if __name__ == '__main__':
     app.debug = True
     app.run()

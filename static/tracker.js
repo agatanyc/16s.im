@@ -7,6 +7,7 @@ function ping(url) {
   var http = new XMLHttpRequest();
   console.log(url);
   timeSpent += 10;
+  // update the page every 10 seconds
   var timeSpentDiv = document.getElementById('time-spent');
   http.onreadystatechange = function() {
       if (http.readyState === XMLHttpRequest.DONE) {
@@ -24,11 +25,10 @@ function track(trackingUrl) {
 }
 
 function sendTimeSpent() {
-    console.log("Going to send time spent = " + timeSpent);
     http = new XMLHttpRequest();
     http.open("GET", url + "?leaving=True&timeSpent=" + timeSpent, true);
     http.send();
 }
 
-window.onunload = sendTimeSpent;
+// function called when the user exits
 window.onbeforeunload = sendTimeSpent;
