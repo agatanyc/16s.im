@@ -5,7 +5,7 @@ statsd  = StatsClient(host = 'localhost',
                       prefix = None,
                       maxudpsize = 512)
 
-def users_stat():
+def users_stat(param=None):
     statsd.incr('impressions', count=1)
 
 def status_stat(status_code):
@@ -17,10 +17,10 @@ def ua_device(device_type):
 def ua_browser(browser):
      statsd.incr('browser.{}'.format(browser), count=1)
 
-def mobile():
+def mobile(param=None):
      statsd.incr('device.is_mobile', count=1)
 
-def touch_capable():
+def touch_capable(param=None):
      statsd.incr('device.is_touch_capable', count=1)
 
 def referer(referer):
