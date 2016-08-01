@@ -5,6 +5,7 @@ from user_agents import parse
 from urlparse import urlparse
 from collections import defaultdict
 from send_information import Info 
+from make_uuid import UUIDGenerator 
 import uuid
 import logging
 import datetime
@@ -14,15 +15,9 @@ import stat_server
 
 app = Flask(__name__)
 info = Info()
+uuid_gen = UUIDGenerator()
 
 logging.basicConfig(filename='web_log', level=logging.INFO)
-
-"""
-def send_info(stat, param=None): # stat is a func defined in stat_server is a string
-    stat_func = getattr(stat_server, stat)
-    logging.info('logged: {}, {}'.format(stat, param))
-    stat_func(param)
-"""
 
 @app.route('/index')
 def index():
@@ -36,7 +31,7 @@ def index():
         stat_server.time_spent(int(time_spent))
 
     # create cookie to be set on a given browser
-    UUID = bytes(uuid.uuid4())
+    UUID = uuid_gen.get_uuid()
     print UUID , 'XXXXXXXXXXX'
     now = datetime.datetime.now()
     future = now + datetime.timedelta(days=90)
