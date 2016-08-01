@@ -16,12 +16,11 @@ class TestInfo(unittest.TestCase):
         self.app = web_presence.app.test_client()
 
 
-    @patch('web_presence.Info', autospec=True)
-    @patch('web_presence.UUIDGenerator', autospec=True)
+    #create mock objects with patch
+    @patch('web_presence.Info')
+    @patch('web_presence.UUIDGenerator')
     def test_index(self, mock_send_info, mock_uuid_gen):
         #Set up the test
-        web_presence.info = mock_send_info
-        web_presence.uuid_gen = mock_uuid_gen
 
         mock_uuid_gen.get_uuid.return_value = 'test_string'
         user_agent = 'Chrome !'
