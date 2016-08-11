@@ -25,14 +25,12 @@ def index():
     # Create response object
     response = app.make_response(render_template('index.html', time_spent=0))
     response.headers['Content-Type'] = 'text/html'
-    print request.args.get('leaving', 'no value!!!')
     if request.args.get('leaving', ''):
         time_spent = request.args.get('timeSpent', '0')
         stat_server.time_spent(int(time_spent))
 
     # create cookie to be set on a given browser
     UUID = uuid_gen.get_uuid()
-    print UUID , 'XXXXXXXXXXX'
     now = datetime.datetime.now()
     future = now + datetime.timedelta(days=90)
     # cookie will expire in 90 days
