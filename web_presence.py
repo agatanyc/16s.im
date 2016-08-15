@@ -12,7 +12,6 @@ import datetime
 import statsd
 import stat_server
 
-
 app = Flask(__name__)
 info = Info()
 uuid_gen = UUIDGenerator()
@@ -65,10 +64,8 @@ def index():
 
     info.send_info('users_stat')
 
-
     return response
     
 if __name__ == '__main__':
     app.debug = True
     app.run()
-
